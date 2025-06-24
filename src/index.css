@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-chess-dark text-chess-light font-sans;
+  }
+}
+
+@layer components {
+  .chess-square {
+    @apply transition-all duration-200;
+  }
+  
+  .chess-square:hover {
+    @apply opacity-80;
+  }
+  
+  .btn-primary {
+    @apply bg-chess-accent hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200;
+  }
+  
+  .card {
+   @apply bg-white/10 rounded-lg p-6 shadow-lg border border-white/20;
+   /* @apply bg-white/10 backdrop-blur-sm rounded-lg p-6 shadow-lg border border-white/20; */
+  }
+}
