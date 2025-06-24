@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Chess } from 'chess.js'
 import { Chessboard } from 'react-chessboard'
-import { RotateCcw, MessageSquare, Bot, User, Loader2, ChevronDown, ChevronRight, Copy, Check, XCircle } from 'lucide-react'
-import ChatPanel from './ChatPanel'
+import { RotateCcw, Bot, User, Loader2, Copy, Check, XCircle } from 'lucide-react'
 
 const ChessGame = ({ apiKey, model }) => {
   const [game, setGame] = useState(new Chess())
   const [moveHistory, setMoveHistory] = useState([])
   const [isThinking, setIsThinking] = useState(false)
-  const [showChat, setShowChat] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
   const [gameStatus, setGameStatus] = useState('playing')
   const [aiEnabled, setAiEnabled] = useState(true)
@@ -418,19 +416,6 @@ Please suggest the best move for Black in algebraic notation (e.g., "e5" or "Nf6
           </div>
         </div>
       </div>
-
-      {/* Chat Panel */}
-      {showChat && (
-        <ChatPanel 
-          game={game}
-          moveHistory={moveHistory}
-          apiKey={apiKey}
-          model={model}
-          showDetails={showDetails}
-          onShowDetailsChange={setShowDetails}
-          onClose={() => setShowChat(false)}
-        />
-      )}
     </div>
     </div>
   )
