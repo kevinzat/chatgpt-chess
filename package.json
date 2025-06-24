@@ -1,8 +1,8 @@
 {
+  "homepage": "https://kevinzat.github.io/chatgpt-chess",
   "name": "chess",
   "version": "1.0.0",
   "description": "Play chess with ChatGPT",
-  "homepage": "http://kevinzat.github.io/chatgpt-chess",
   "type": "module",
   "scripts": {
     "dev": "vite",
