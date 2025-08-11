@@ -102,7 +102,7 @@ Please suggest the best move for Black in algebraic notation (e.g., "e5" or "Nf6
         const lines = chatgptResponse.trim().split('\n')
         const firstLine = lines[0].trim()
 
-        const moveMatch = firstLine.match(/\b([a-h][1-8]|[a-h]x[a-h][1-8]|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]|[O-O-O]|[O-O])[+#]?\b/)
+        const moveMatch = firstLine.match(/\b([a-h][1-8]|[a-h]x[a-h][1-8]|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]|O-O-O|O-O)[+#]?\b/)
         if (!moveMatch) {
           console.log('No move found in first line')
           console.log('ChatGPT response for AI move:', chatgptResponse)
