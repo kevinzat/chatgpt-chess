@@ -3,13 +3,13 @@ import { Chess } from 'chess.js'
 import { Chessboard } from 'react-chessboard'
 import { RotateCcw, Bot, User, Loader2, Copy, Check, XCircle } from 'lucide-react'
 
+
 const ChessGame = ({ apiKey, model }) => {
   const [game, setGame] = useState(new Chess())
   const [moveHistory, setMoveHistory] = useState([])
   const [isThinking, setIsThinking] = useState(false)
-  const [showDetails, setShowDetails] = useState(false)
   const [gameStatus, setGameStatus] = useState('playing')
-  const [aiEnabled, setAiEnabled] = useState(true)
+  const [aiEnabled, _setAiEnabled] = useState(true)
   const [expandedMoves, setExpandedMoves] = useState(new Set())
   const [expandedFen, setExpandedFen] = useState(false)
   const [fenCopied, setFenCopied] = useState(false)
@@ -53,7 +53,9 @@ const ChessGame = ({ apiKey, model }) => {
 IMPORTANT: Start your response with the move in algebraic notation on its own line, then provide your explanation.`
 
       const userMessage = `I am playing as Black in a chess game. 
+
 Move history: ${formattedMoves.join(' ')}
+
 Please suggest the best move for Black in algebraic notation (e.g., "e5" or "Nf6") and explain your reasoning.`
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -100,13 +102,14 @@ Please suggest the best move for Black in algebraic notation (e.g., "e5" or "Nf6
         const lines = chatgptResponse.trim().split('\n')
         const firstLine = lines[0].trim()
 
-        const moveMatch = firstLine.match(/\b([a-h][1-8]|[a-h]x[a-h][1-8]|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]|[O-O-O]|[O-O])\b/)
+        const moveMatch = firstLine.match(/\b([a-h][1-8]|[a-h]x[a-h][1-8]|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]|[O-O-O]|[O-O])[+#]?\b/)
         if (!moveMatch) {
           console.log('No move found in first line')
           console.log('ChatGPT response for AI move:', chatgptResponse)
           fallbackErrorType = 'no-move-found'
-        } else if (!possibleMoves.includes(moveMatch[1])) {
+        } else if (!possibleMoves.includes(firstLine)) {
           console.log('Move ' + firstLine + ' not in possible moves')
+          console.log('Possible moves:', possibleMoves.join(" "));
           console.log('ChatGPT response for AI move:', chatgptResponse)
           fallbackErrorType = 'not-legal-move'
         } else {
@@ -217,6 +220,47 @@ Please suggest the best move for Black in algebraic notation (e.g., "e5" or "Nf6
     if (game.isStalemate()) return 'Stalemate!'
     if (game.isCheck()) return 'Check!'
     return game.turn() === 'w' ? 'White to move' : 'Black to move'
+  }
+
+  const getBoardDescription = () => {
+    const board = game.board()
+    let description = "The white pieces are at these locations:\n"
+    
+    // Find white pieces
+    for (let rank = 0; rank < 8; rank++) {
+      for (let file = 0; file < 8; file++) {
+        const piece = board[rank][file]
+        if (piece && piece.color === 'w') {
+          const square = String.fromCharCode(97 + file) + (8 - rank) // Convert to algebraic notation
+          const pieceName = piece.type === 'p' ? 'Pawn' : 
+                           piece.type === 'r' ? 'Rook' : 
+                           piece.type === 'n' ? 'Knight' : 
+                           piece.type === 'b' ? 'Bishop' : 
+                           piece.type === 'q' ? 'Queen' : 'King'
+          description += `• ${pieceName} at ${square}\n`
+        }
+      }
+    }
+    
+    description += "\nThe black pieces are at these locations:\n"
+    
+    // Find black pieces
+    for (let rank = 0; rank < 8; rank++) {
+      for (let file = 0; file < 8; file++) {
+        const piece = board[rank][file]
+        if (piece && piece.color === 'b') {
+          const square = String.fromCharCode(97 + file) + (8 - rank) // Convert to algebraic notation
+          const pieceName = piece.type === 'p' ? 'Pawn' : 
+                           piece.type === 'r' ? 'Rook' : 
+                           piece.type === 'n' ? 'Knight' : 
+                           piece.type === 'b' ? 'Bishop' : 
+                           piece.type === 'q' ? 'Queen' : 'King'
+          description += `• ${pieceName} at ${square}\n`
+        }
+      }
+    }
+    
+    return description
   }
 
   // Make AI move after player's move
