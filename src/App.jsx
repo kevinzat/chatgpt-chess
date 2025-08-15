@@ -5,7 +5,7 @@ import Settings from './components/Settings'
 
 function App() {
   const [apiKey, setApiKey] = useState('')
-  const [model, setModel] = useState('gpt-3.5-turbo')
+  const [model, setModel] = useState('gpt-4.1-nano')
   const [showSettings, setShowSettings] = useState(false)
 
   return (
